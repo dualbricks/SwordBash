@@ -1,22 +1,17 @@
 import pygame
-from pygame import display
-from pygame import time
-from pygame import math
-from pygame.locals import *
 
+WIDTH, HEIGHT = 900, 500
+WIN = pygame.display.set_mode((WIDTH,HEIGHT))
 
-pygame.init()
+def main():
+    
+    run = True
+    while run:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                run = False
+    pygame.quit()
 
-vec = math.Vector2
-
-HEIGHT = 450
-WIDTH = 400
-ACC= 0.5
-FRIC = -0.12
-FPS= 60
-
-FramePerSec = time.Clock()
-
-displaysurface = display.set_mode((WIDTH,HEIGHT))
-display.set_caption("Game")
-
+    p
+if __name__ == "__main__":
+    main()
