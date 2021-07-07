@@ -27,7 +27,8 @@ def bg_music():
     pygame.mixer.music.play(-1, 0.0)
 
 
-def ground_floor():
+def staging():
+    WIN.blit(background, (0, 0))
     for x in range(0, 900, 100):
         WIN.blit(ground, (x, ground_value))
 
@@ -55,8 +56,7 @@ def main():
     run = True
     while run:
         clock.tick(FPS)
-        WIN.blit(background, (0, 0))
-        ground_floor()
+        staging()
         for event in pygame.event.get():
             key_pressed = pygame.key.get_pressed()
             actions(key_pressed)
