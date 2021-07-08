@@ -8,16 +8,22 @@ pygame.init()
 # game_prefix
 game = constants
 # character
-player = character.Player()
 
 
 def main():
+    player = character.Player()
     # game.bg_music()
     run = True
     while run:
         game.staging()
         game.CLOCK.tick(game.FPS)
         for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_j:
+                    if player.type == "character":
+                        player = character.TransformChar(player.pos)
+                    else:
+                        player = character.Player(player.pos)
             if event.type == pygame.QUIT:
                 run = False
         player.move()
