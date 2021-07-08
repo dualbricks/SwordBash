@@ -12,18 +12,17 @@ player = character.Player()
 
 
 def main():
-    game.bg_music()
+    # game.bg_music()
     run = True
     while run:
-
         game.staging()
+        game.CLOCK.tick(game.FPS)
         for event in pygame.event.get():
-            player.move()
-            game.WIN.blit(player.image, player.rect)
-            game.CLOCK.tick(game.FPS)
             if event.type == pygame.QUIT:
                 run = False
-            pygame.display.update()
+        player.move()
+        game.WIN.blit(player.image, player.rect)
+        pygame.display.update()
     pygame.quit()
 
 

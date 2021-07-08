@@ -83,7 +83,7 @@ class Player(pygame.sprite.Sprite):
             self.pos.x = game.WIDTH
 
         # updating the rect
-        self.rect.midbottom = self.pos
+        self.rect.topleft = self.pos
 
         self.runIndex += 1
         if self.runIndex >= len(self.runRight) * 6:
