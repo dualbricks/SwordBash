@@ -17,7 +17,9 @@ class Player(pygame.sprite.Sprite):
                      pygame.image.load(os.path.join("assets", "animations", "idle", "tile003.png")),
                      pygame.image.load(os.path.join("assets", "animations", "idle", "tile004.png")),
                      pygame.image.load(os.path.join("assets", "animations", "idle", "tile005.png"))]
-
+        self.idleLeft = []
+        for frames in self.idle:
+            self.idleLeft.append(pygame.transform.flip(frames, True, False))
         self.image = self.idle[0]
         self.rect = self.image.get_rect()
         self.running = False
@@ -52,7 +54,7 @@ class Player(pygame.sprite.Sprite):
 
         self.jumpIndex = 0
 
-    def idle(self):
+    def update_idle(self):
 
         self.idleIndex += 1
         if self.idleIndex >= len(self.idle) * 5:
@@ -69,10 +71,15 @@ class Player(pygame.sprite.Sprite):
 
         if pressed_keys[pygame.K_LEFT]:
             self.acc.x = -game.ACC
+            self.direction = "LEFT"
+            self.running = True
         elif pressed_keys[pygame.K_RIGHT]:
             self.acc.x = game.ACC
+            self.direction = "RIGHT"
+            self.running = True
         else:
             self.acc.x = 0
+            self.running = False
 
         # moving the position
         self.acc.x += self.vel.x * game.FRIC
@@ -84,13 +91,22 @@ class Player(pygame.sprite.Sprite):
             self.pos.x = 0
         if self.pos.x < 0:
             self.pos.x = game.WIDTH
-
-        # updating the rect
-        self.rect.topleft = self.pos
-
         self.runIndex += 1
         if self.runIndex >= len(self.runRight) * 6:
             self.runIndex = 0
+
+        if not self.running:
+            self.update_idle()
+        # updating the rect
+        if self.running and self.direction == "RIGHT":
+            self.image = self.runRight[self.runIndex // 6]
+        elif self.running and self.direction == "LEFT":
+            self.image = self.runLeft[self.runIndex // 6]
+        elif not self.running and self.direction == "RIGHT":
+            self.image = self.idle[self.idleIndex // 5]
+        else:
+            self.image = self.idleLeft[self.idleIndex // 5]
+        self.rect.topleft = self.pos
 
     def jump(self):
 
