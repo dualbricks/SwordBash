@@ -52,6 +52,11 @@ class Player(pygame.sprite.Sprite):
                      pygame.image.load(os.path.join("assets", "animations", "fall", "tile000.png")),
                      pygame.image.load(os.path.join("assets", "animations", "fall", "tile001.png"))]
 
+        self.jumpLeft = []
+
+        for frames in self.jump:
+            self.jumpLeft.append(pygame.transform.flip(frames, True, False))
+
         self.jumpIndex = 0
 
     def update_idle(self):
@@ -61,6 +66,8 @@ class Player(pygame.sprite.Sprite):
             self.idleIndex = 0
 
     def move(self):
+        if self.pos.y >= game.ground_value:
+            self.acc = vec(0, 0.5)
         # only move when speed is high
         if abs(self.vel.x) > 0.5:
             self.running = True
@@ -72,11 +79,9 @@ class Player(pygame.sprite.Sprite):
         if pressed_keys[pygame.K_LEFT]:
             self.acc.x = -game.ACC
             self.direction = "LEFT"
-            self.running = True
         elif pressed_keys[pygame.K_RIGHT]:
             self.acc.x = game.ACC
             self.direction = "RIGHT"
-            self.running = True
         else:
             self.acc.x = 0
             self.running = False
@@ -92,27 +97,34 @@ class Player(pygame.sprite.Sprite):
         if self.pos.x < 0:
             self.pos.x = game.WIDTH
         self.runIndex += 1
-        if self.runIndex >= len(self.runRight) * 6:
+        if self.runIndex >= len(self.runRight) * 4:
             self.runIndex = 0
 
         if not self.running:
             self.update_idle()
         # updating the rect
         if self.running and self.direction == "RIGHT":
-            self.image = self.runRight[self.runIndex // 6]
+            self.image = self.runRight[self.runIndex // 4]
         elif self.running and self.direction == "LEFT":
-            self.image = self.runLeft[self.runIndex // 6]
-        elif not self.running and self.direction == "RIGHT":
+            self.image = self.runLeft[self.runIndex // 4]
+        elif not self.running and self.direction == "RIGHT" and not self.jumping:
             self.image = self.idle[self.idleIndex // 5]
         else:
             self.image = self.idleLeft[self.idleIndex // 5]
         self.rect.topleft = self.pos
 
-    def jump(self):
-
+    def update_jump(self):
+        self.jumping = True
+        self.vel.y = -0.32
+        self.pos += self.vel
         self.jumpIndex += 1
         if self.jumpIndex >= len(self.jump) * 5:
             self.jumpIndex = 0
+        if self.jumping and self.direction == "RIGHT":
+            self.image = self.jump[self.jumpIndex // 5]
+        elif self.jumping and self.direction == "LEFT":
+            self.image = self.jumpLeft[self.jumpIndex // 5]
+        self.rect.topleft = self.pos
 
 
 class TransformChar(pygame.sprite.Sprite):

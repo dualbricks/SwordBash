@@ -25,7 +25,7 @@ def main():
                     else:
                         player = character.Player(player.pos)
                 elif event.key == pygame.K_SPACE:
-                    player.jump()
+                    player.update_jump()
             if event.type == pygame.QUIT:
                 run = False
         player.move()
