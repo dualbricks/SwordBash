@@ -1,6 +1,7 @@
 import os
 import pygame
 
+vec = pygame.math.Vector2
 FPS = 60
 WIDTH, HEIGHT = 900, 500
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -18,7 +19,25 @@ def bg_music():
     pygame.mixer.music.play(-1, 0.0)
 
 
+class Platform(pygame.sprite.Sprite):
+    def __init__(self, pos = vec(0, 0) ):
+        super().__init__()
+        self.pos = pos
+        self.image = ground
+        self.rect = self.image.get_rect()
+        self.rect.topleft = self.pos
+
+    def render(self):
+        WIN.blit(self.image, self.rect)
+
+
 def staging():
     WIN.blit(background, (0, 0))
+
     for x in range(0, 900, 100):
-        WIN.blit(ground, (x, ground_value))
+        Platform(vec(x, ground_value)).render()
+
+
+platform_group = pygame.sprite.Group().add(Platform())
+
+
